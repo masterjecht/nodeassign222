@@ -1,0 +1,43 @@
+extends layout
+
+block content
+  div(class="container-fluid")
+    h2 Enter a Tag to add to the List:
+      form(method='POST' action = '/index')
+        input( class="searchbar" type = 'text' name = "search"  onclick="Cancelupdate()")
+
+        input( class="searchbutton" type ='submit' name = 'Search')
+
+      form(method='POST' action = '/index/check' name='form1')
+      table(class="table")
+       thead
+        tr
+         th Tweet
+         th Most Similar Tweet
+         th Percentage Similar
+       tbody
+        - var n = 1;
+           while n < tags.length
+            tr
+             td
+              blockquote
+               h2=tags[n]
+               p=texts[n]
+               footer=names[n]
+             td
+              blockquote
+               h2=similarharshtag[n]
+               p=similartext[n]
+               footer=similarname[n]
+             td
+              p=similarpercentage[n++]
+
+    script.
+     var timer = setTimeout(retrievedata, 3000);
+     function retrievedata(){
+     document.form1.submit();
+     }
+     function Cancelupdate(){
+     clearTimeout(timer);
+
+     }
