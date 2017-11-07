@@ -26,8 +26,8 @@ var TweetData = [];
 router.post('/', function(req, res, next) {
   TweetData = [];
     // global varibles for the functions loops
-    results = "" + req.body.search.split(" ").join("+");
-        console.log(results);
+    results = "#" + req.body.search.split(" ").join("+");
+      //  console.log(results);
     var TweetName = results;
 // local functions for callbacks
 
@@ -202,7 +202,7 @@ function Similarity(){
       var count = 0;
   for (var u=1;u<TweetText.length;u++){
 
-    var Similarnum = 0;
+    var Similarnum = 999;
     var SimilarName ="";
     var SimilarText ="";
     var SimilarHarshtag ="";
@@ -212,18 +212,18 @@ function Similarity(){
         count ++;
     match = natural.LevenshteinDistance(TweetData[z].statuses[x].text,TweetText[u]);
 
-    if (match > Similarnum){
+    if (match < Similarnum){
       Similarnum = match;
       SimilarName = TweetData[z].statuses[x].user.name
       SimilarText = TweetData[z].statuses[x].text;
       SimilarHarshtag = TweetData[z].search_metadata.query;
-    //  console.log("Growing to: " +  Similarnum);
+      console.log("Growing to: " +  Similarnum);
     }
   } // end if
 
     }
   }
-  var percentage = Similarnum * 100;
+  var percentage = Similarnum;
    TweetSimilarText[u] = SimilarText;
    TweetSimilarName[u] = SimilarName;
    TweetSimilarPercentage[u] = percentage.toFixed(2);
