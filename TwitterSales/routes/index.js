@@ -30,10 +30,10 @@ router.post('/', function(req, res, next) {
       //  console.log(results);
     var TweetName = results;
 // local functions for callbacks
-
   var tweets = "none"
   tweets = GetTweets(TweetName, render);
 
+// this is a callback function that is triggered after GetTweets is finished
   function render(data){
 
             if (data.statuses.length !== 0){
@@ -44,18 +44,18 @@ router.post('/', function(req, res, next) {
          TweetHashtag[TweetCount] = TweetName;
          TweetName[TweetCount] = data.statuses[0].user.name;
          TweetLastText[TweetCount] = "";
-             console.log(TweetHashtag[1] + TweetText[1] + TweetID[1]);
-        Similarity();
-        console.log("Rendering");
-        res.render('index',{tags:TweetHashtag, texts:TweetText, names:TweetName, similarname:TweetSimilarName,
-           similartext: TweetSimilarText, similarpercentage: TweetSimilarPercentage, similarharshtag:TweetSimilarHarshtag});
+          res.redirect("/index/check");
+       }
+       else{
+         res.render('index',{tags:TweetHashtag, texts:TweetText, names:TweetName, similarname:TweetSimilarName,
+            similartext: TweetSimilarText, similarpercentage: TweetSimilarPercentage, similarharshtag:TweetSimilarHarshtag, message:"Error No harshtag of that name found"});
        }
   }
 
 });
 
 // this is the check posts
-router.post('/check', function(req, res, next) {
+router.get('/check', function(req, res, next) {
 // this is where the program will check fro any updates
 TweetData = [];
 var TweetList = [];
@@ -63,13 +63,22 @@ var TweetListTweet = [];
 var TweetListOwner = [];
 var i = 1;
 var TweetTest = 0;
+
+// check to see if there is any tweets to check
+if (TweetCount == 0){
+  res.render('index',{tags:TweetHashtag, texts:TweetText, names:TweetName, similarname:TweetSimilarName,
+     similartext: TweetSimilarText, similarpercentage: TweetSimilarPercentage, similarharshtag:TweetSimilarHarshtag, message:"Error No harshtags entered"});
+return;
+}
+
 StartWaterfall();
 
-
+// this is the start of the iteration over every hashtage
   function StartWaterfall(){
   GetTweets(TweetHashtag[i],checkdata);
 }
 
+// this function playes to check the data and whether it has more hashtags to find or to compare the hashtags
       function checkdata(data) {
         // check if there is data to be compared to
         TweetData.push(data);
@@ -199,7 +208,6 @@ access_token_secret: 'h53KCgbTTwULJbRxt47vlf8atI8piod71pbMX4lwidjlt'
 // this function checks the simlarty of every main tweet with every tweet recieved find the most similar
 function Similarity(){
   // enter 3 loops
-      var count = 0;
   for (var u=1;u<TweetText.length;u++){
 
     var Similarnum = 999;
@@ -209,7 +217,7 @@ function Similarity(){
     for(var z=0;z<TweetData.length;z++){
     for(var x=0;x<TweetData[z].statuses.length;x++){
       if (TweetData[z].statuses[x].text !==TweetText[u]){
-        count ++;
+        
     match = natural.LevenshteinDistance(TweetData[z].statuses[x].text,TweetText[u]);
 
     if (match < Similarnum){
@@ -224,12 +232,13 @@ function Similarity(){
     }
   }
   var percentage = Similarnum;
+  SimilarHarshtag = SimilarHarshtag.replace("%23","#");
    TweetSimilarText[u] = SimilarText;
    TweetSimilarName[u] = SimilarName;
-   TweetSimilarPercentage[u] = percentage.toFixed(2);
+   TweetSimilarPercentage[u] = percentage;
    TweetSimilarHarshtag[u] = SimilarHarshtag;
+
   }
-  console.log("BASIC OPERATION COUNT IS:" + count);
 }
 
 

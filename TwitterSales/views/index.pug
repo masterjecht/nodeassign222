@@ -10,7 +10,8 @@ block content
 
         input( class="searchbutton" type ='submit' name = 'Search')
 
-      form(method='POST' action = '/index/check' name='form1')
+      form(method='GET' action = '/index/check' name='form1')
+      p(class="text-danger")=message
       table(class="table")
        thead
         tr
