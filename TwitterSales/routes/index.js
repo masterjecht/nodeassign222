@@ -26,7 +26,7 @@ var TweetData = [];
 router.post('/', function(req, res, next) {
   TweetData = [];
     // global varibles for the functions loops
-    results = "" + req.body.search.split(" ").join("+");
+    results = "#" + req.body.search.split(" ").join("+");
         console.log(results);
     var TweetName = results;
 // local functions for callbacks
@@ -102,15 +102,6 @@ TweetTest = data.statuses[0].id
           console.log('relooping');
           StartWaterfall();
         } else {
-//          fs.writeFile("C:/Users/Daniel/Desktop/Cloud Computing/test.txt", "Hey there! adding", function(err) {
-//    if(err) {
-  //      return console.log(err);
-  //  } else {
-//          console.log("The file was saved!");
-  //  }
-
-
-//});
         // this checks how similar strings are
         Similarity();
         console.log("Rendering");
@@ -229,40 +220,16 @@ function Similarity(){
 
     }
   }
+  var percentage = Similarnum * 100;
    TweetSimilarText[u] = SimilarText;
    TweetSimilarName[u] = SimilarName;
-   TweetSimilarPercentage[u] = Similarnum;
+   TweetSimilarPercentage[u] = percentage.toFixed(2);
    TweetSimilarHarshtag[u] = SimilarHarshtag;
   console.log("the most similar tweet for:" + TweetText[u] + " is " + SimilarText + " by " + SimilarName + " That scored a " + Similarnum );
   }
 
 }
 
-// this function uses natural to check how similar two sequencal tweets are also checks against eveyr other tweet in the list
-
-/*function Similarity(){
-  var u = 1;
-  for (u = 1; u < TweetCount+1; u ++){
-// check if there is previous text
-console.log("last text is: " + TweetLastText[u]);
-if (TweetLastText[u] !== ""){
-TweetSimilar[u] = natural.JaroWinklerDistance(TweetLastText[u],TweetText[u]);
-console.log("the words similarity is: " + TweetSimilar[u]);
-                            }
-// check tweet against all others
-var o = 1;
-  for (o = 1; o < TweetCount+1; o ++){
-if (TweetText[o] !== TweetText[u]){
-  console.log(natural.JaroWinklerDistance(TweetText[u],TweetText[o]));
-}
-  }
-
-
-
-
-                                  }
-}
-  */
 
 
 

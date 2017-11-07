@@ -1,27 +1,18 @@
 extends layout
 
+
 block content
   div(class="container-fluid")
-    center
-      br
-      br
-      br
-      br
-      br
-      br
-      br
-      br
-      h3 Twitter Rater
-      h1 Please enter a name of a company or product
+   center
+    h1 Twitter Analyzer
+    h2 Enter a Tag to add to the List:
       form(method='POST' action = '/index')
-        input( class="searchbar" type = 'text' name = "search" value = "search")
+        input( class="searchbar" type = 'text' name = "search"  onclick="Cancelupdate()")
 
         input( class="searchbutton" type ='submit' name = 'Search')
-      br
-      br
-      br
-      br
-      br
-      br
-      br
-      br
+        table(class="table")
+         thead
+          tr
+           th Tweet
+           th Most Similar Tweet
+           th Percentage Similar

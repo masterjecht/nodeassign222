@@ -2,6 +2,8 @@ extends layout
 
 block content
   div(class="container-fluid")
+   center
+    h1 Twitter Analyzer
     h2 Enter a Tag to add to the List:
       form(method='POST' action = '/index')
         input( class="searchbar" type = 'text' name = "search"  onclick="Cancelupdate()")
@@ -30,7 +32,7 @@ block content
                p=similartext[n]
                footer=similarname[n]
              td
-              p=similarpercentage[n++]
+              p=similarpercentage[n++] + '%'
 
     script.
      var timer = setTimeout(retrievedata, 3000);
