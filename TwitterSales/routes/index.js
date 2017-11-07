@@ -26,7 +26,7 @@ var TweetData = [];
 router.post('/', function(req, res, next) {
   TweetData = [];
     // global varibles for the functions loops
-    results = "#" + req.body.search.split(" ").join("+");
+    results = "" + req.body.search.split(" ").join("+");
         console.log(results);
     var TweetName = results;
 // local functions for callbacks
@@ -154,7 +154,7 @@ access_token_secret: 'h53KCgbTTwULJbRxt47vlf8atI8piod71pbMX4lwidjlt'
 });
 
 // check if there is a tweetid
-    var params = {q:hashtag, count: 100, lang: 'en'};
+    var params = {q:hashtag, count: 1000, lang: 'en'};
 
   client.get('search/tweets', params, function(error, tweets, response) {
     if (!error) {
@@ -199,7 +199,9 @@ access_token_secret: 'h53KCgbTTwULJbRxt47vlf8atI8piod71pbMX4lwidjlt'
 // this function checks the simlarty of every main tweet with every tweet recieved find the most similar
 function Similarity(){
   // enter 3 loops
+      var count = 0;
   for (var u=1;u<TweetText.length;u++){
+
     var Similarnum = 0;
     var SimilarName ="";
     var SimilarText ="";
@@ -207,14 +209,15 @@ function Similarity(){
     for(var z=0;z<TweetData.length;z++){
     for(var x=0;x<TweetData[z].statuses.length;x++){
       if (TweetData[z].statuses[x].text !==TweetText[u]){
-        //console.log("comparing:" + TweetData[z].statuses[x].text + "With : " + TweetText[u]);
-    match = natural.JaroWinklerDistance(TweetData[z].statuses[x].text,TweetText[u]);
+        count ++;
+    match = natural.LevenshteinDistance(TweetData[z].statuses[x].text,TweetText[u]);
+
     if (match > Similarnum){
       Similarnum = match;
       SimilarName = TweetData[z].statuses[x].user.name
       SimilarText = TweetData[z].statuses[x].text;
       SimilarHarshtag = TweetData[z].search_metadata.query;
-      console.log("Growing to: " +  Similarnum);
+    //  console.log("Growing to: " +  Similarnum);
     }
   } // end if
 
@@ -225,9 +228,8 @@ function Similarity(){
    TweetSimilarName[u] = SimilarName;
    TweetSimilarPercentage[u] = percentage.toFixed(2);
    TweetSimilarHarshtag[u] = SimilarHarshtag;
-  console.log("the most similar tweet for:" + TweetText[u] + " is " + SimilarText + " by " + SimilarName + " That scored a " + Similarnum );
   }
-
+  console.log("BASIC OPERATION COUNT IS:" + count);
 }
 
 
